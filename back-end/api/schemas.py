@@ -1,90 +1,121 @@
-from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any, List
+from datetime import datetime
+from pydantic import BaseModel, Field, ConfigDict
 
-# ---------------------------------------------------------
-# Core Domain Models
-# ---------------------------------------------------------
-class MacroDrivers(BaseModel):
-    households: float = Field(..., description="Total number of households", gt=0)
-    floor_area_sqm: float = Field(..., description="Total floor area in square meters", gt=0)
-    occupancy_rate: float = Field(..., description="Average persons per household", gt=0)
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    is_admin: bool = False
 
-class FuelAssignment(BaseModel):
-    """Represents a specific fuel assigned to a leaf node."""
-    name: str = Field(..., description="Must match the APEC DB product string")
-    weight: float = Field(..., description="Relative weight of this fuel", ge=0.0)
-    efficiency: float = Field(default=1.0, description="Transformation efficiency (eta)", gt=0.0)
+class UserBase(BaseModel):
+    username: str
+    email: str
 
-class CalculatedFuel(FuelAssignment):
-    """Extends assignment with calculated physical values."""
-    normalized_weight: float = Field(..., description="Proportional share among sibling fuels")
-    allocated_energy: float = Field(..., description="Top-down physical energy (Mass balance)")
-    effective_energy: float = Field(..., description="Energy delivered after applying efficiency (eta)")
+class UserCreate(UserBase):
+    password: str
+
+class UserRead(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    is_active: bool
+    is_admin: bool
+    api_key: Optional[str] = None
+    valid_until: Optional[datetime] = None
+
+class UserCreateAdmin(UserCreate):
+    is_admin: bool = False
+    valid_until: Optional[datetime] = None
 
 class WeightNode(BaseModel):
-    weight: float = Field(..., description="Raw bottom-up weight", ge=0.0)
-    min_weight: Optional[float] = Field(default=None, description="Optional lower bound weight constraint for optimization", ge=0.0, le=1.0)
-    max_weight: Optional[float] = Field(default=None, description="Optional upper bound weight constraint for optimization", ge=0.0, le=1.0)
-    macro_driver: Optional[str] = None
-    tags: Optional[List[str]] = Field(default=None, description="Metadata tags for special node handling")
-    children: Optional[Dict[str, 'WeightNode']] = None
-    fuels: Optional[List[FuelAssignment]] = Field(default=None, description="Fuels assigned at the leaf node")
+    """
+    Schema for a bottom-up branch node configuration.
+    Includes min/max bounds utilized in SLSQP optimization.
+    """
+    model_config = ConfigDict(from_attributes=True)
 
-class CalculatedNode(BaseModel):
-    weight: float
-    normalized_weight: float
-    min_weight: Optional[float] = Field(default=None, description="Optional lower bound weight constraint")
-    max_weight: Optional[float] = Field(default=None, description="Optional upper bound weight constraint")
-    macro_driver: Optional[str] = None
-    tags: Optional[List[str]] = None
-    allocated_energy: float = Field(..., description="Top-down physical energy allocated to this node")
-    children: Optional[Dict[str, 'CalculatedNode']] = None
-    fuels: Optional[List[CalculatedFuel]] = None
+    node_id: str = Field(..., description="Unique identifier for the hierarchical node")
+    weight: float = Field(..., description="Reconciliation or allocation weight factor")
+    min_weight: Optional[float] = Field(default=None, description="Minimum weight boundary constraint for SLSQP optimization")
+    max_weight: Optional[float] = Field(default=None, description="Maximum weight boundary constraint for SLSQP optimization")
 
 
-# ---------------------------------------------------------
-# API Request/Response Payloads
-# ---------------------------------------------------------
-class InitializationRequest(BaseModel):
-    """Payload to initialize the tree and fetch the macro total."""
-    economy: str = Field(..., description="Economy code or identifier (e.g., '01_AUS')")
-    year: int = Field(..., description="Year of the simulation")
-    sector_flow: str = Field(..., description="Target sector mapped to the 'flows' column in the DB")
+class FuelAssignment(BaseModel):
+    """
+    Schema for an end-use fuel assignment node.
+    Includes min/max bounds utilized in SLSQP optimization.
+    """
+    model_config = ConfigDict(from_attributes=True)
 
-class InitializationResponse(BaseModel):
-    """Response returning the top-down total energy for the selected flow."""
+    fuel_id: str = Field(..., description="Identifier of the specific fuel type")
+    share: float = Field(..., description="Allocated fractional share of energy consumption")
+    min_weight: Optional[float] = Field(default=None, description="Minimum share boundary constraint for SLSQP optimization")
+    max_weight: Optional[float] = Field(default=None, description="Maximum share boundary constraint for SLSQP optimization")
+
+
+class ProjectBase(BaseModel):
+    economy: str = Field(..., description="APEC economy code or abbreviation")
+    sector_flow: str = Field(..., description="Target sector code or end-use flow category")
+
+
+class ProjectCreate(ProjectBase):
+    base_year: Optional[int] = Field(default=2024, description="Optional base year for initial scenario creation (1990-2022)")
+
+
+class Project(ProjectBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+
+
+class ScenarioBase(BaseModel):
+    name: Optional[str] = Field(default="Base Year", description="Name of the scenario (defaults to 'Base Year')")
+    target_year: int = Field(..., description="Projection target year (1990-2022)")
+    tree_state: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Multi-year temporal tree structure, e.g. {'base_year': {...}, '2035': {...}}")
+    macro_drivers: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Multi-year macroeconomic target totals, e.g. {'base_year': {...}}")
+    active_fuels: Optional[Any] = Field(default=None, description="APEC active leaf-fuels dynamically fetched (array or temporal dict)")
+    owner_id: Optional[int] = None
+
+
+class ScenarioCreate(ScenarioBase):
+    pass
+
+
+class ScenarioUpdate(BaseModel):
+    name: Optional[str] = None
+    target_year: Optional[int] = None
+    tree_state: Optional[Dict[str, Any]] = None
+    macro_drivers: Optional[Dict[str, Any]] = None
+
+
+class Scenario(ScenarioBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    project_id: int
+
+
+class StatelessTemplateRequest(BaseModel):
     economy: str
-    year: int
     sector_flow: str
-    total_energy: float = Field(..., description="Total top-down energy for the requested sector")
-    message: str
+    target_year: int = 2024
 
-class TreeLayerUpdatePayload(BaseModel):
-    """Payload for submitting a tree for balancing, validation, or optimization."""
-    economy: str
-    year: int
-    sector_flow: str
-    total_energy: float = Field(..., description="The macro total retrieved in Stage 1")
-    target_layer: str = Field(..., description="Identifier for the current stage (e.g., 'full_tree')")
-    tree_state: Dict[str, WeightNode] = Field(..., description="The hierarchical tree state")
+class StatelessTemplateResponse(BaseModel):
+    tree_state: Dict[str, Any]
+    macro_drivers: Dict[str, Any]
+    active_fuels: List[Any]
 
-class LayerUpdateResponse(BaseModel):
-    """Standardized response after calculating, validating, or optimizing a tree."""
-    status: str = Field(..., description="Execution status, e.g., 'success', 'validation_error'")
-    message: str
-    balanced_tree: Dict[str, CalculatedNode] = Field(..., description="The newly balanced tree populated with calculated energy values")
-    validation_details: Optional[Dict[str, Any]] = Field(default=None, description="Detailed breakdown of macro imbalances")
+class StatelessOptimizeRequest(BaseModel):
+    tree_state: Dict[str, Any]
+    target_total: float = 100.0
+    macro_drivers: Dict[str, Any] = Field(default_factory=dict)
+    active_fuels: List[Any] = Field(default_factory=list)
 
-class ExportRequest(BaseModel):
-    """Payload to trigger the final Excel generation."""
-    economy: str
-    year: int
-    sector_flow: str
-    macro_drivers: MacroDrivers = Field(..., description="The macroeconomic values for intensity calculations")
-    balanced_tree: Dict[str, CalculatedNode] = Field(..., description="The fully built, validated, and balanced energy tree")
+class ScenarioImport(BaseModel):
+    economy: str = Field(..., description="APEC economy code")
+    sector_flow: str = Field(..., description="Target sector code")
+    scenario_name: str = Field(..., description="Scenario name")
+    target_year: int = Field(..., description="Target year")
+    macro_drivers: Dict[str, Any] = Field(default_factory=dict, description="Multi-year macro drivers map")
+    tree_state: Dict[str, Any] = Field(..., description="Multi-year tree state structure")
+    telemetry: Optional[Dict[str, Any]] = None
 
-class ExportResponse(BaseModel):
-    """Response details for a successful LEAP export."""
-    status: str
-    leap_export_path: str = Field(..., description="File path to the generated LEAP Excel workbook")
-    message: str
