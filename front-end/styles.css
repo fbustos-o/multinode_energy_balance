@@ -1,511 +1,538 @@
-/* =========================================
-   UTILITIES
-   ========================================= */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
-    border-radius: 10px;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
 }
 
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.2s ease-out forwards;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+body {
+  font-family: var(--font-sans);
+  background-color: #0b0f19;
+  color: #f3f4f6;
+  overflow-x: hidden;
 }
 
-/* =========================================
-   TREE HIERARCHY LINES (CSS MAGIC)
-   ========================================= */
-.tree-list {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 0;
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
 }
 
-.tree-node-group {
-    position: relative;
-    padding-left: 2.5rem;
-    margin-top: 1rem;
+/* Glassmorphism Styles */
+.glass {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Removes padding for the very root elements */
-#tree-nodes-list > .tree-node-group {
-    padding-left: 0;
-    margin-top: 1.5rem;
+.glass-premium {
+  background: rgba(31, 41, 55, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
-/* The vertical line dropping down from the parent */
-.tree-node-group::before {
-    content: '';
-    position: absolute;
-    top: -1rem; /* Connect to parent above */
-    bottom: 0;
-    left: 0.75rem; /* Center the line */
-    width: 2px;
-    background-color: #cbd5e1;
+/* Ambient glow backgrounds */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  opacity: 0.15;
+  pointer-events: none;
 }
 
-/* Remove vertical line extension for root level */
-#tree-nodes-list > .tree-node-group::before {
-    display: none;
+.glow-blue {
+  background: #3b82f6;
+  width: 400px;
+  height: 400px;
+  top: -10%;
+  left: 10%;
 }
 
-/* Stop the vertical line exactly at the horizontal branch for the last child */
-.tree-node-group:last-child::before {
-    bottom: auto;
-    height: 3rem; /* Drops down exactly to the horizontal connector */
+.glow-teal {
+  background: #0d9488;
+  width: 450px;
+  height: 450px;
+  bottom: -10%;
+  right: 15%;
 }
 
-/* The horizontal line connecting the vertical line to the card */
+.glow-purple {
+  background: #8b5cf6;
+  width: 350px;
+  height: 350px;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Custom animations */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(1.15); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 15s infinite ease-in-out;
+}
+
+/* Tree visualization connecting lines styling */
+.tree-node-card {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tree-node-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Node flagged with imbalance */
+.node-imbalanced {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+  animation: border-pulse-red 2s infinite ease-in-out;
+}
+
+@keyframes border-pulse-red {
+  0%, 100% { border-color: rgba(239, 68, 68, 0.8); }
+  50% { border-color: rgba(239, 68, 68, 0.4); }
+}
+
+/* Compact Mode Styles */
+.compact-mode .tree-node-card {
+  padding: 0.75rem 1rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.compact-mode li {
+  margin-bottom: 0.5rem !important;
+}
+
+.compact-mode ul {
+  margin-top: 0.5rem !important;
+}
+
+.compact-mode input[type="text"] {
+  font-size: 0.8rem !important;
+}
+
+.compact-mode input[type="number"],
+.compact-mode select {
+  font-size: 0.7rem !important;
+  padding: 0.2rem 0.4rem !important;
+}
+
+.compact-mode label {
+  font-size: 0.55rem !important;
+}
+
+.compact-mode .bg-slate-950.border {
+  padding: 0.5rem !important;
+}
+
+/* Compact Mode Accordion */
+.compact-mode .tree-node-card .tree-card-body {
+  display: none;
+}
+
+.compact-mode .tree-node-card.show-body .tree-card-body {
+  display: block;
+  animation: slide-down-accordion 0.25s ease-out forwards;
+}
+
+.accordion-chevron {
+  transition: transform 0.2s ease;
+}
+
+.compact-mode .tree-node-card .accordion-chevron {
+  transform: rotate(-90deg);
+}
+
+.compact-mode .tree-node-card.show-body .accordion-chevron {
+  transform: rotate(0deg);
+}
+
+@keyframes slide-down-accordion {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= FIGMA-STYLE DRAGGABLE NODE GRAPH ================= */
+#tree-pan-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px;
+  min-width: max-content;
+  min-height: max-content;
+  position: relative;
+}
+
 .tree-node-wrapper {
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 0 16px;
 }
 
-.tree-node-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 2rem; /* Vertical center alignment with the node card header */
-    left: -1.75rem;
-    width: 1.75rem;
-    height: 2px;
-    background-color: #cbd5e1;
+.tree-node-children {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  padding-top: 32px;
+  width: 100%;
 }
 
-/* Root nodes don't need horizontal connector lines */
-#tree-nodes-list > .tree-node-group > .tree-node-wrapper::before {
-    display: none;
+.tree-node-card {
+  position: relative;
+  z-index: 10;
+  transition: box-shadow 0.2s;
 }
 
-/* =========================================
-   NODE CARDS & BADGES
-   ========================================= */
-.node-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    width: 380px; /* Fixed width to keep tree tidy */
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
-    position: relative;
-    z-index: 2;
+.tree-node-card.is-dragging {
+  z-index: 50 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  cursor: grabbing !important;
 }
 
-.node-card:focus-within, .node-card:hover {
-    border-color: #93c5fd;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+.tree-card-header {
+  cursor: grab;
 }
 
-/* The Balancing Node Tag */
-.tag-balancing {
-    position: absolute;
-    top: -0.6rem;
-    right: 1rem;
-    font-size: 0.65rem;
-    font-weight: 800;
-    padding: 0.15rem 0.6rem;
-    border-radius: 9999px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: #fef08a; /* yellow-200 */
-    color: #854d0e; /* yellow-800 */
-    border: 1px solid #fde047;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    z-index: 10;
+.tree-card-header:active {
+  cursor: grabbing;
 }
 
-/* Target Dashboard Progress Bars */
-.progress-bar-fill {
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
+/* Compact mode spacing compression */
+.compact-mode .tree-node-children {
+  padding-top: 16px !important;
 }
 
-/* =========================================
-   COLLAPSIBLE TREE BRANCHES & GROUPING
-   ========================================= */
 
-/* Hides the child list instantly when a parent branch is grouped/collapsed */
-.tree-children-list.is-collapsed {
-    display: none !important;
+/* ================= PREMIUM LIGHT THEME OVERRIDES ================= */
+body.light-theme {
+  background-color: #f1f5f9;
+  color: #0f172a;
 }
 
-/* Modifies the node card background and accent line when children are hidden */
-.node-card.is-collapsed-card {
-    border-left: 4px solid #8b5cf6 !important; /* Purple indicator for hidden groupings */
-    background-color: #f8fafc;
-    box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+body.light-theme .glow-orb {
+  opacity: 0.05;
 }
 
-/* Rotates the collapse toggle chevron button smoothly based on state */
-.btn-toggle-collapse {
-    transition: transform 0.15s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+body.light-theme .glass {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #0f172a !important;
 }
 
-.btn-toggle-collapse.is-rotated {
-    transform: rotate(-90deg);
+body.light-theme .glass-premium {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* =========================================
-   COMPACT BOUNDARY INPUTS
-   ========================================= */
-.input-boundary-box {
-    font-variant-numeric: tabular-nums;
+body.light-theme #welcome-modal {
+  background: rgba(15, 23, 42, 0.35) !important;
 }
 
-.input-boundary-box::placeholder {
-    color: #cbd5e1;
-    font-size: 10px;
-    text-align: center;
+body.light-theme #welcome-modal .md\:w-7\/12,
+body.light-theme #welcome-modal .bg-slate-900\/80 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
-/* =========================================
-   INTERACTIVE CANVAS (PAN & ZOOM)
-   ========================================= */
-#tree-canvas {
-    overflow: hidden !important;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: #f8fafc; /* Sleek slate-50 background for empty spaces */
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    outline: none;
+body.light-theme #welcome-modal h4,
+body.light-theme #welcome-modal h2,
+body.light-theme #welcome-modal h3,
+body.light-theme #welcome-modal button#tab-new-btn,
+body.light-theme #welcome-modal button#tab-load-btn.text-white {
+  color: #0f172a !important;
 }
 
-#tree-canvas.is-grabbing {
-    cursor: grabbing !important;
+body.light-theme #welcome-modal button#tab-load-btn {
+  color: #64748b !important;
 }
 
-/* Smooth zoom transition when panning or zooming */
-#tree-transform-container {
-    transform-origin: 0 0;
-    will-change: transform;
-    transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+body.light-theme #welcome-modal p,
+body.light-theme #welcome-modal label {
+  color: #475569 !important;
 }
 
-/* When active drag is occurring, disable transition to prevent lag and match cursor 1:1 */
-#tree-transform-container.is-dragging {
-    transition: none !important;
+body.light-theme #welcome-modal input,
+body.light-theme #welcome-modal select,
+body.light-theme #welcome-modal #saved-scenarios-container {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-/* =========================================
-   HYBRID INTERACTIVE HIERARCHY (HORIZONTAL-VERTICAL)
-   ========================================= */
-
-/* The top-level list of roots grows horizontal side-by-side */
-#tree-nodes-list {
-    display: flex;
-    flex-direction: row;
-    gap: 4.5rem; /* Wide gap between separate columns */
-    align-items: flex-start;
+body.light-theme header.glass {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-bottom-color: #cbd5e1 !important;
 }
 
-/* Align children vertical under each root node */
-#tree-nodes-list .tree-children-list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+body.light-theme header h1, 
+body.light-theme header span {
+  color: #0f172a !important;
 }
 
-/* Adjust connectives inside vertical trees */
-.tree-node-group {
-    position: relative;
-    padding-left: 2.25rem;
-    margin-top: 1rem;
+body.light-theme header span {
+  color: #475569 !important;
 }
 
-#tree-nodes-list > .tree-node-group {
-    padding-left: 0;
-    margin-top: 0rem; /* Top-level roots have no top margins */
+body.light-theme header #badge-economy,
+body.light-theme header #badge-sector,
+body.light-theme header #badge-year {
+  color: #0f172a !important;
 }
 
-/* Stop parent vertical connectives for top-level columns */
-#tree-nodes-list > .tree-node-group::before {
-    display: none !important;
+body.light-theme header .lg\:flex {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #cbd5e1 !important;
 }
 
-#tree-nodes-list > .tree-node-group > .tree-node-wrapper::before {
-    display: none !important;
+body.light-theme #exit-btn,
+body.light-theme #theme-toggle-btn,
+body.light-theme #welcome-theme-toggle-btn {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
 }
 
-/* =========================================
-   COMPACT MODE (HIGH DENSITY SCREEN ADJUSTMENT)
-   ========================================= */
-
-.canvas-compact-mode .node-card {
-    width: 255px !important; /* Slim down cards */
-    font-size: 0.8rem;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+body.light-theme #exit-btn:hover,
+body.light-theme #theme-toggle-btn:hover,
+body.light-theme #welcome-theme-toggle-btn:hover {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-/* Hide bounds and drivers */
-.canvas-compact-mode .node-bounds-container,
-.canvas-compact-mode .node-driver-container {
-    display: none !important;
+/* Sidebar and inputs */
+body.light-theme section.md\:w-80 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-right-color: #cbd5e1 !important;
 }
 
-/* Compact headers and inputs */
-.canvas-compact-mode .node-card input.input-node-name {
-    font-size: 0.75rem !important;
+body.light-theme section.md\:w-80 label {
+  color: #475569 !important;
 }
 
-.canvas-compact-mode .node-card input.input-weight {
-    padding: 0.2rem !important;
-    font-size: 0.75rem !important;
+body.light-theme section.md\:w-80 input,
+body.light-theme section.md\:w-80 select,
+body.light-theme section.md\:w-80 .bg-slate-950\/70 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-/* Hide footer actions by default, show elegantly on hover */
-.canvas-compact-mode .node-card .node-actions-footer {
-    display: none !important;
-    opacity: 0;
-    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+body.light-theme #active-scenario-name {
+  color: #0f172a !important;
 }
 
-.canvas-compact-mode .node-card:hover .node-actions-footer {
-    display: flex !important;
-    opacity: 1;
+/* Center Pane */
+body.light-theme #center-pane {
+  background-color: #f8fafc !important;
 }
 
-/* =========================================
-   ACTIVE CARD HIGH-CONTRAST FOCUS INDICATOR
-   ========================================= */
-.node-card.is-active-card {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+body.light-theme #center-pane-title {
+  color: #0f172a !important;
 }
 
-/* Active card has glowing top border */
-.node-card.is-active-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: #3b82f6;
-    border-radius: 0.5rem 0.5rem 0 0;
+body.light-theme #center-pane-subtitle {
+  color: #475569 !important;
 }
 
-/* =========================================
-   CUSTOM CONFIRMATION MODAL & TOASTS
-   ========================================= */
-
-/* Custom Confirm Modal Transition Styles */
-#custom-confirm-modal.flex-display {
-    display: flex !important;
+body.light-theme #tree-canvas-container {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
 }
 
-/* Custom Toast Notifications */
-.custom-toast {
-    pointer-events: auto;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid #e2e8f0;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    animation: toastSlideIn 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    transition: all 0.2s ease;
+body.light-theme .tree-node-card {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-.custom-toast.toast-fade-out {
-    animation: toastFadeOut 0.18s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+body.light-theme .tree-node-card input,
+body.light-theme .tree-node-card select,
+body.light-theme .tree-node-card .bg-slate-950,
+body.light-theme .tree-node-card .bg-slate-900 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-@keyframes toastSlideIn {
-    from { opacity: 0; transform: translateY(-12px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+body.light-theme .tree-node-card h3,
+body.light-theme .tree-node-card span {
+  color: #0f172a !important;
 }
 
-@keyframes toastFadeOut {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(0.9); }
+body.light-theme .tree-node-card .text-slate-400,
+body.light-theme .tree-node-card .text-slate-500 {
+  color: #475569 !important;
 }
 
-.toast-success {
-    border-left: 4px solid #10b981 !important;
+body.light-theme .tree-node-card button.bg-slate-800 {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
 }
 
-.toast-error {
-    border-left: 4px solid #ef4444 !important;
+body.light-theme .tree-node-card button.bg-slate-800:hover {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-.toast-warning {
-    border-left: 4px solid #f59e0b !important;
+/* HUD controls and stats */
+body.light-theme .bg-\[\#090d16\] {
+  background-color: #ffffff !important;
+  border-bottom-color: #cbd5e1 !important;
 }
 
-/* =========================================
-   CUSTOM WEIGHT SELECTOR (SLIDER)
-   ========================================= */
-
-.input-weight-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    border-radius: 9999px;
-    background: #e2e8f0;
-    outline: none;
-    transition: background 0.15s ease;
+body.light-theme .bg-slate-950 {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-.input-weight-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #3b82f6;
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    transition: transform 0.1s ease, background-color 0.1s ease;
+body.light-theme .border-slate-800,
+body.light-theme .border-slate-850 {
+  border-color: #cbd5e1 !important;
 }
 
-.input-weight-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.25);
-    background: #2563eb;
+body.light-theme .bg-slate-900 {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-.input-weight-slider::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    border: 2px solid white;
-    border-radius: 50%;
-    background: #3b82f6;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    transition: transform 0.1s ease, background-color 0.1s ease;
+body.light-theme .bg-slate-950 span,
+body.light-theme .bg-slate-950 button {
+  color: #334155 !important;
 }
 
-.input-weight-slider::-moz-range-thumb:hover {
-    transform: scale(1.25);
-    background: #2563eb;
+body.light-theme .bg-slate-950 button:hover {
+  color: #0f172a !important;
 }
 
-/* =========================================
-   COMPACT MODE FINE-TUNING
-   ========================================= */
-
-.canvas-compact-mode .node-card .node-slider-container {
-    display: none !important;
+body.light-theme .bg-slate-950 label {
+  color: #334155 !important;
 }
 
-.canvas-compact-mode .node-card input.input-weight {
-    min-width: 0 !important;
-    max-width: 70px !important;
-    padding: 0.15rem 0.3rem !important;
+body.light-theme .bg-slate-950 input[type="checkbox"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-.canvas-compact-mode .node-card .input-weight-label {
-    width: 2.25rem !important; /* Shrunk weight label block */
-    font-size: 0.7rem !important;
+body.light-theme .flex-none.p-6.border-t {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-top-color: #cbd5e1 !important;
 }
 
-.canvas-compact-mode .node-card .pct-label {
-    width: 2.25rem !important;
-    font-size: 0.7rem !important;
-    text-align: right;
+body.light-theme .flex-none.p-6.border-t h3 {
+  color: #0f172a !important;
 }
 
-.node-card input.input-weight {
-    min-width: 0;
+body.light-theme .flex-none.p-6.border-t .bg-slate-900\/40 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
 }
 
-/* =========================================
-   HIGH IMBALANCE BADGE (RED WARNING SYSTEM)
-   ========================================= */
-.tag-balancing-high {
-    background-color: #fee2e2 !important; /* red-100 */
-    color: #991b1b !important; /* red-800 */
-    border-color: #fca5a5 !important; /* red-300 */
-    animation: pulseWarningBorder 2s infinite ease-in-out;
+body.light-theme .flex-none.p-6.border-t .bg-slate-900\/40 div {
+  color: #0f172a !important;
 }
 
-@keyframes pulseWarningBorder {
-    0%, 100% {
-        box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1), 0 0 0 0 rgba(239, 68, 68, 0.4);
-    }
-    50% {
-        box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2), 0 0 0 6px rgba(239, 68, 68, 0.15);
-    }
+body.light-theme #stat-top-down {
+  color: #0d9488 !important; /* Keep macroeconomic target legibly teal */
 }
 
-/* =========================================
-   COLLAPSIBLE RESULTS SIDEBAR (RIGHT PANEL)
-   ========================================= */
-#results-sidebar {
-    transition: width 320ms cubic-bezier(0.4, 0, 0.2, 1), opacity 320ms ease, border-color 320ms ease;
-    will-change: width, opacity;
+body.light-theme #stat-imbalance.text-emerald-400 {
+  color: #059669 !important; /* Keep balanced energy legibly emerald green */
 }
 
-#results-sidebar.is-collapsed {
-    width: 0px !important;
-    border-left-width: 0px !important;
-    opacity: 0;
-    pointer-events: none;
+body.light-theme #stat-imbalance.text-red-400 {
+  color: #dc2626 !important; /* Keep imbalanced energy legibly red */
 }
 
-#results-sidebar.is-collapsed #btn-toggle-results {
-    left: -14px !important;
-    border-right-width: 1px !important;
-    border-left-width: 0px !important;
-    border-radius: 0.375rem 0 0 0.375rem !important;
+/* Weight slider track background override for Light Theme */
+body.light-theme input[type="range"].weight-slider {
+  background-color: #cbd5e1 !important; /* High visibility Slate-300 grey track */
 }
 
-/* Results Card aesthetic */
-.result-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+body.light-theme .flex-none.p-6.border-t #projections-tabs-container {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
 }
 
-.result-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-    transform: translateY(-1px);
+body.light-theme .flex-none.p-6.border-t #projections-tabs-container button {
+  color: #334155 !important;
 }
 
-/* Breadcrumbs in results paths */
-.result-breadcrumb {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #94a3b8;
+body.light-theme .flex-none.p-6.border-t #projections-tabs-container button.bg-slate-800 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
-/* Badges for associated fuels */
-.fuel-badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.6rem;
-    font-weight: 800;
-    padding: 0.1rem 0.45rem;
-    border-radius: 9999px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    background-color: #e0f2fe; /* blue-100 */
-    color: #0369a1; /* blue-700 */
-    border: 1px solid #bae6fd;
+/* Results & Comparison View Table Styles */
+body.light-theme .overflow-x-auto table thead {
+  background-color: #cbd5e1 !important;
 }
-
+
+body.light-theme .overflow-x-auto table thead th {
+  color: #0f172a !important;
+}
+
+body.light-theme .overflow-x-auto table tbody tr {
+  border-bottom-color: #cbd5e1 !important;
+}
+
+body.light-theme .overflow-x-auto table tbody tr td {
+  color: #334155 !important;
+}
+
+body.light-theme .overflow-x-auto table tbody tr td .text-white {
+  color: #0f172a !important;
+}
+
+body.light-theme .overflow-x-auto table tbody tr td span.text-indigo-300 {
+  color: #4338ca !important;
+}
+
+/* Loader Spinner Styles */
+.loader-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(20, 184, 166, 0.3); /* teal-500 with low opacity */
+  border-radius: 50%;
+  border-top-color: #14b8a6; /* teal-500 */
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
