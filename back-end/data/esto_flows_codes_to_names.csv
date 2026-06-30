@@ -1,0 +1,108 @@
+﻿flows,is_subtotal,Level
+01 Production,TRUE,1
+02 Imports,TRUE,1
+03 Exports,TRUE,1
+04 International marine bunkers,TRUE,1
+05 International aviation bunkers,TRUE,1
+06 Stock changes,TRUE,1
+07 Total primary energy supply,TRUE,1
+08 Transfers,TRUE,1
+08.01 Recycled products,FALSE,2
+08.02 Interproduct transfers,FALSE,2
+08.03 Products transferred,FALSE,2
+08.04 Gas separation,FALSE,2
+08.99 Transformation nonspecified,FALSE,2
+09 Total transformation sector,FALSE,2
+09.01 Main activity producer,FALSE,2
+09.01.01 Electricity plants,FALSE,2
+09.01.02 CHP plants,FALSE,2
+09.01.03 Heat plants,FALSE,2
+09.02 Autoproducers,FALSE,2
+09.02.01 Electricity plants,FALSE,2
+09.02.02 CHP plants,FALSE,2
+09.02.03 Heat plants,FALSE,2
+09.03 Heat pumps,FALSE,2
+09.04 Electric boilers,FALSE,2
+09.05 Chemical heat for electricity production,FALSE,2
+09.06 Gas processing plants,FALSE,2
+09.06.01 Gas works plants,FALSE,2
+09.06.02 Liquefaction/regasification plants,FALSE,2
+09.06.03 Natural gas blending plants,FALSE,2
+09.06.04 Gas-to-liquids plants,FALSE,2
+09.07 Oil refineries,FALSE,2
+09.08 Coal transformation,TRUE,2
+09.08.01 Coke ovens,FALSE,3
+09.08.02 Blast furnaces,FALSE,3
+09.08.03 Patent fuel plants,FALSE,3
+09.08.04 BKB/PB plants,FALSE,3
+09.08.05 Liquefaction (coal to oil),FALSE,3
+09.09 Petrochemical industry,FALSE,2
+09.10 Biofuels processing,FALSE,2
+09.11 Charcoal processing,FALSE,2
+09.12 Non-specified transformation,FALSE,2
+10 Losses & own use,TRUE,1
+10.01 Own Use,TRUE,2
+"10.01.01 Electricity, CHP and heat plants",FALSE,3
+10.01.02 Gas works plants,FALSE,3
+10.01.03 Liquefaction/regasification plants,FALSE,3
+10.01.04 Gas-to-liquids plants,FALSE,3
+10.01.05 Coke ovens,FALSE,3
+10.01.06 Coal mines,FALSE,3
+10.01.07 Blast furnaces,FALSE,3
+10.01.08 Patent fuel plants,FALSE,3
+10.01.09 BKB/PB plants,FALSE,3
+10.01.10 Liquefaction plants (Coal to Oil),FALSE,3
+10.01.11 Oil refineries,FALSE,3
+10.01.12 Oil and gas extraction,FALSE,3
+10.01.13 Pump storage plants,FALSE,3
+10.01.14 Nuclear industry,FALSE,3
+10.01.15 Charcoal production plants,FALSE,3
+10.01.16 Gasification plants for biogases,FALSE,3
+10.01.17 Non-specified own uses,FALSE,3
+10.02 Transmission and distribution losses,FALSE,2
+11 Statistical discrepancy,TRUE,1
+12 Total final consumption,TRUE,1
+13 Total final energy consumption,TRUE,1
+14 Industry sector,TRUE,1
+14.01 Mining and quarrying,FALSE,2
+14.02 Construction,FALSE,2
+14.03 Manufacturing,TRUE,2
+14.03.01 Iron and steel,FALSE,3
+14.03.02 Chemical (incl. petrochemical),FALSE,3
+14.03.03 Non ferrous metals,FALSE,3
+14.03.04 Non-metallic mineral products,FALSE,3
+14.03.05 Transportation equipment,FALSE,3
+14.03.06 Machinery,FALSE,3
+"14.03.07 Food, beverages and tobacco",FALSE,3
+"14.03.08 Pulp, paper and printing",FALSE,3
+14.03.09 Wood and wood products,FALSE,3
+14.03.10 Textiles and leather,FALSE,3
+14.03.11 Non-specified industry,FALSE,3
+15 Transport sector,TRUE,1
+15.01 Domestic air transport,FALSE,2
+15.02 Road,FALSE,2
+15.03 Rail,FALSE,2
+15.04 Domestic navigation,FALSE,2
+15.05 Pipeline transport,FALSE,2
+15.06 Non-specified transport,FALSE,2
+16 Other sector,TRUE,1
+16.01 Commercial and public services,FALSE,2
+16.02 Residential,FALSE,2
+16.03 Agriculture,FALSE,2
+16.04 Fishing,FALSE,2
+16.05 Non-specified others,FALSE,2
+17 Non-energy use,TRUE,1
+17.01 Transformation sector,FALSE,2
+17.02 Industry sector,FALSE,2
+17.03 Transport sector,FALSE,2
+17.04 Other sector,FALSE,2
+18 Electricity output in GWh,TRUE,1
+18.01 MAP electricity plants,FALSE,2
+18.02 MAP CHP plants,FALSE,2
+18.03 AP electricity plants,FALSE,2
+18.04 AP CHP plants,FALSE,2
+19 Heat output in PJ,TRUE,1
+19.01 MAP CHP plants,FALSE,2
+19.02 MAP heat plants,FALSE,2
+19.03 AP CHP plants,FALSE,2
+19.04 AP heat plants,FALSE,2

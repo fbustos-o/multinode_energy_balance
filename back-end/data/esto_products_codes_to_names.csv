@@ -1,0 +1,79 @@
+﻿products,is_subtotal,Level
+01 Coal,TRUE,1
+01.01 Coking coal,FALSE,2
+01.02 Other bituminous coal,FALSE,2
+01.03 Sub-bituminous coal,FALSE,2
+01.04 Anthracite,FALSE,2
+01.05 Lignite,FALSE,2
+01.99 Coal nonspecified,FALSE,2
+02 Coal products,TRUE,1
+02.01 Coke oven coke,FALSE,2
+02.02 Gas coke,FALSE,2
+02.03 Coke oven gas,FALSE,2
+02.04 Blast furnace gas,FALSE,2
+02.05 Other recovered gases,FALSE,2
+02.06 Patent fuel,FALSE,2
+02.07 Coal tar,FALSE,2
+02.08 BKB/PB,FALSE,2
+03 Peat,TRUE,1
+04 Peat products,TRUE,1
+05 Oil shale and oil sands,TRUE,1
+06 Crude oil & NGL,TRUE,1
+06.01 Crude oil,FALSE,2
+06.02 Natural gas liquids,FALSE,2
+06.03 Refinery feedstocks,FALSE,2
+06.04 Additives/  oxygenates,FALSE,2
+06.05 Other hydrocarbons,FALSE,2
+07 Petroleum products,TRUE,1
+07.01 Motor gasoline,FALSE,2
+07.02 Aviation gasoline,FALSE,2
+07.03 Naphtha,FALSE,2
+07.04 Gasoline type jet fuel,FALSE,2
+07.05 Kerosene type jet fuel,FALSE,2
+07.06 Kerosene,FALSE,2
+07.07 Gas/diesel oil,FALSE,2
+07.08 Fuel oil,FALSE,2
+07.09 LPG,FALSE,2
+07.10 Refinery gas (not liquefied),FALSE,2
+07.11 Ethane,FALSE,2
+07.12 White spirit SBP,FALSE,2
+07.13 Lubricants,FALSE,2
+07.14 Bitumen,FALSE,2
+07.15 Paraffin  waxes,FALSE,2
+07.16 Petroleum coke,FALSE,2
+07.17 Other products,FALSE,2
+07.99 PetProd nonspecified,FALSE,2
+08 Gas,TRUE,1
+08.01 Natural gas,FALSE,2
+08.02 LNG,FALSE,2
+08.03 Gas works gas,FALSE,2
+08.99 Gas nonspecified,FALSE,2
+09 Nuclear,TRUE,1
+10 Hydro,TRUE,1
+11 Geothermal,TRUE,1
+12 Solar,TRUE,1
+12.01 of which: Photovoltaics,FALSE,2
+12.99 Solar nonspecified,FALSE,2
+"13 Tide, wave, ocean",TRUE,1
+14 Wind,TRUE,1
+15 Solid biomass,TRUE,1
+15.01 Fuelwood & woodwaste,FALSE,2
+15.02 Bagasse,FALSE,2
+15.03 Charcoal,FALSE,2
+15.04 Black liqour,FALSE,2
+15.05 Other biomass,FALSE,2
+16 Others,TRUE,1
+16.01 Biogas,FALSE,2
+16.02 Industrial waste,FALSE,2
+16.03 Municipal solid waste (renewable),FALSE,2
+16.04 Municipal solid waste (non-renewable),FALSE,2
+16.05 Biogasoline,FALSE,2
+16.06 Biodiesel,FALSE,2
+16.07 Bio jet kerosene,FALSE,2
+16.08 Other liquid biofuels,FALSE,2
+16.09 Other sources,FALSE,2
+17 Electricity,TRUE,1
+18 Heat,TRUE,1
+19 Total,TRUE,1
+20 Total Renewables,TRUE,1
+21 Modern renewables,TRUE,1
